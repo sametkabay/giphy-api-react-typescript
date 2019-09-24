@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Input } from 'antd';
 import './index.scss';
+import SearchStore from '../../Stores/search';
 
 export interface SearchProps {}
 
@@ -11,6 +12,11 @@ class Search extends React.Component<SearchProps, SearchState> {
     super(props);
     this.state = { q: '' };
   }
+
+  componentDidMount() {
+    SearchStore.getSearchValue();
+  }
+
   render() {
     return (
       <div>
