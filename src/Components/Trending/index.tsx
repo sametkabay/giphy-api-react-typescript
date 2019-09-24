@@ -5,10 +5,10 @@ export interface TrendingProps {}
 export interface TrendingState {}
 
 class Trending extends React.Component<TrendingProps, TrendingState> {
-  constructor(props: TrendingProps) {
-    super(props);
-    // this.state = { :  };
-  }
+  //   constructor(props: TrendingProps) {
+  //     super(props);
+  //     // this.state = { : };
+  //   }
   render() {
     return <>Trending</>;
   }
