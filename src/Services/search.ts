@@ -1,17 +1,20 @@
 import axios from 'axios';
+import SearchDto from '../Models/searchDto';
 
 const searchPath = '/v1/gifs/search';
 
 class SearchService {
-  static async getSearchValue() {
+  static async getSearchValue(q: string, offset: number, limit: number): Promise<SearchDto> {
     var response = await axios.get(process.env.REACT_APP_API_URL + searchPath, {
       params: {
         apiKey: process.env.REACT_APP_API_KEY,
-        q: 'umbrella',
-        limit: 20,
+        q,
+        limit,
+        offset,
       },
     });
-    return response.data.data;
+    console.log(response.data.data);
+    return response.data;
   }
 }
 

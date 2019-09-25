@@ -1,23 +1,44 @@
 import React from 'react';
-import { Row, Col, Input } from 'antd';
+import { Row, Col, Input, Button } from 'antd';
 import './index.scss';
 import SearchStore from '../../Stores/search';
+import SearchModel from '../../Models/searchModel';
 
 export interface SearchProps {}
 
-export interface SearchState {}
+export interface SearchState {
+  q: string;
+  offset: number;
+  searchValue: SearchModel[];
+  moreButtonDisabled: boolean;
+}
 
+const queryCapacity: number = 20;
 class Search extends React.Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
-    this.state = { q: '' };
+    this.state = { q: '', searchValue: [], offset: 0, moreButtonDisabled: false };
   }
 
-  componentDidMount() {
-    SearchStore.getSearchValue();
+  async onSearch(q: string) {
+    this.setState({ searchValue: [], offset: 0, moreButtonDisabled: false });
+    let searchValue: SearchModel[] = [];
+    var result = await SearchStore.getSearchValue(q, 0, queryCapacity);
+    result.length < queryCapacity && this.setState({ moreButtonDisabled: true });
+    Object.assign(searchValue, result);
+    this.setState({ searchValue, q });
+  }
+
+  async loadMore(offset: number) {
+    let { searchValue } = this.state;
+    var result = await SearchStore.getSearchValue(this.state.q, offset, queryCapacity);
+    result.length < queryCapacity && this.setState({ moreButtonDisabled: true });
+    result.forEach(value => searchValue.push(value));
+    this.setState({ searchValue, offset: this.state.offset + queryCapacity });
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <Row>
@@ -25,37 +46,37 @@ class Search extends React.Component<SearchProps, SearchState> {
             <Input.Search
               size={'large'}
               placeholder="search gif..."
-              onSearch={value => console.log(value)}
+              onSearch={value => this.onSearch(value)}
               enterButton
             />
           </Col>
 
           <Row className="search-gif-container">
-            <Col className="gif" span={12}>
-              <img
-                alt="gif"
-                src="https://media1.giphy.com/media/vbf8Tx7TChZEA/200.webp?cid=790b7611306c2709d81850fbc27de7eee22f50804448e7d7&rid=200.webp"
-              ></img>
-            </Col>
-            <Col className="gif" span={12}>
-              <img
-                alt="gif"
-                src="https://media1.giphy.com/media/vbf8Tx7TChZEA/200.webp?cid=790b7611306c2709d81850fbc27de7eee22f50804448e7d7&rid=200.webp"
-              ></img>
-            </Col>
-            <Col className="gif" span={12}>
-              <img
-                alt="gif"
-                src="https://media1.giphy.com/media/vbf8Tx7TChZEA/200.webp?cid=790b7611306c2709d81850fbc27de7eee22f50804448e7d7&rid=200.webp"
-              ></img>
-            </Col>
-            <Col className="gif" span={12}>
-              <img
-                alt="gif"
-                src="https://media1.giphy.com/media/vbf8Tx7TChZEA/200.webp?cid=790b7611306c2709d81850fbc27de7eee22f50804448e7d7&rid=200.webp"
-              ></img>
-            </Col>
+            {this.state.searchValue.map((value, index) => {
+              return (
+                <Col className="single-gif-container" span={12}>
+                  <div
+                    style={{ backgroundImage: 'url(' + value.safeUrl + ')' }}
+                    key={index}
+                    className="gif"
+                    onClick={() => (window.location.href = value.url)}
+                  ></div>
+                </Col>
+              );
+            })}
           </Row>
+          {this.state.searchValue.length > 0 && (
+            <Row>
+              <Col className={'load-more-button-container'} span={24}>
+                <Button
+                  disabled={this.state.moreButtonDisabled}
+                  onClick={() => this.loadMore(this.state.offset + this.state.searchValue.length)}
+                >
+                  Load More
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Row>
       </div>
     );
