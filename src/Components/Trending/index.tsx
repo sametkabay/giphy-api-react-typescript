@@ -2,6 +2,7 @@ import React from 'react';
 import TrendingStore from '../../Stores/trending';
 import { Row, Col } from 'antd';
 import TrendingModel from '../../Models/trendingModel';
+import './index.scss';
 
 export interface TrendingProps {}
 
@@ -40,7 +41,7 @@ class Trending extends React.Component<TrendingProps, TrendingState> {
 
   render() {
     return (
-      <Row className="search-gif-container">
+      <Row className="trending-gif-container">
         {this.state.trendingValue.map((value, index) => {
           return (
             <Col className="single-gif-container" span={12}>

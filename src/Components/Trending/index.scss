@@ -1,0 +1,25 @@
+.trending-gif-container {
+  margin: 64px 20vw;
+}
+.single-gif-container {
+  padding: 16px 4px 0 4px;
+  height: 300px;
+}
+
+.load-more-button-container {
+  margin: 32px;
+}
+
+.gif {
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  .trending-gif-container {
+    margin: 32px 4px;
+  }
+}
