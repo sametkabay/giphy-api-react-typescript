@@ -38,7 +38,6 @@ class Search extends React.Component<SearchProps, SearchState> {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <Row>

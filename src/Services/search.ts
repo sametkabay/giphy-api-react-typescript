@@ -13,7 +13,6 @@ class SearchService {
         offset,
       },
     });
-    console.log(response.data.data);
     return response.data;
   }
 }
