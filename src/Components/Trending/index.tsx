@@ -26,8 +26,11 @@ class Trending extends React.Component<TrendingProps, TrendingState> {
     //Scroll add event lister
 
     window.addEventListener('scroll', event => {
-      console.log(event);
-      debugger;
+      // console.log(window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight);
+      var maxScrollValue = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var scrollValue = document.documentElement.scrollTop;
+
+      maxScrollValue === scrollValue && this.getValue(this.state.offset + queryCapacity);
     });
   }
   async getValue(offset: number) {
